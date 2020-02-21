@@ -1,4 +1,6 @@
 def mvnCmd = "mvn -s configuration/cicd-settings-nexus3.xml"
+def appVersion="2.2.0.${BUILD_NUMBER}"
+
 
 pipeline {
   agent {
@@ -11,6 +13,11 @@ pipeline {
   }
 
   stages {
+    stage('Set Version'){
+      steps{
+        sh "${mvnCmd} versions:set -DnewVersion=${appVersion}"
+      }
+    }
     stage('Build App') {
       steps {
         sh "${mvnCmd} install -DskipTests=true"
@@ -39,7 +46,7 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject(env.DEV_PROJECT) {
-            openshift.selector("bc", "petclinic").startBuild("--from-file=target/spring-petclinic.jar", "--wait=true")
+            openshift.selector("bc", "petclinic").startBuild("--from-file=target/spring-petclinic-${appVersion}.jar", "--wait=true")
             }
           }
         }
