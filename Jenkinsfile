@@ -26,7 +26,12 @@ pipeline {
     stage('Test') {
       steps {
         sh "${mvnCmd} test"
-        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+      }
+      post{
+        always{
+          junit '**/target/surefire-reports/TEST-*.xml'
+          jacoco execPattern: 'target/jacoco.exec'
+        }
       }
     }
     stage('Code Analysis') {
