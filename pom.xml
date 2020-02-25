@@ -168,12 +168,13 @@
         <version>${jacoco.version}</version>
         <executions>
           <execution>
+            <id>coverage-initialize</id>
             <goals>
               <goal>prepare-agent</goal>
             </goals>
           </execution>
           <execution>
-            <id>report</id>
+            <id>coverage-report</id>
             <phase>prepare-package</phase>
             <goals>
               <goal>report</goal>
@@ -239,7 +240,7 @@
       <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.6.1</version>
+          <version>3.7.0.1746</version>
           <configuration>
               <source>1.8</source>
               <target>1.8</target>
