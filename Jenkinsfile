@@ -4,10 +4,31 @@ def appVersion="2.2.0.${BUILD_NUMBER}"
 
 pipeline {
   agent {
-    node {
-      label 'maven'
+    kubernetes {
+      cloud 'openshift'
+      label 'spring-petclinic-pipeline-agent'
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    worker: spring-petclinic-pipeline-agent
+spec:
+  containers:
+  - name: jnlp
+    image: registry.redhat.io/openshift4/ose-jenkins-agent-base:v4.2.15
+    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+  - name: maven
+    image: registry.redhat.io/codeready-workspaces/stacks-java-rhel8:2.0
+    command:
+    - cat
+    tty: true
+  imagePullSecrets:
+    - name: jenkins-pull-secret
+"""
     }
   }
+  
   options {
     timeout(time: 20, unit: 'MINUTES')
   }
@@ -15,17 +36,23 @@ pipeline {
   stages {
     stage('Set Version'){
       steps{
-        sh "${mvnCmd} versions:set -DnewVersion=${appVersion}"
+        container("maven"){
+          sh "${mvnCmd} versions:set -DnewVersion=${appVersion}"
+        }
       }
     }
     stage('Build App') {
       steps {
-        sh "${mvnCmd} install -DskipTests=true"
+        container("maven"){
+          sh "${mvnCmd} install -DskipTests=true"
+        }
       }
     }
     stage('Test') {
       steps {
-        sh "${mvnCmd} test"
+        container("maven"){
+          sh "${mvnCmd} test"
+        }
       }
       post{
         always{
@@ -37,13 +64,17 @@ pipeline {
     stage('Code Analysis') {
       steps {
         script {
-        sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -DskipTests=true"
+          container("maven"){
+            sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -DskipTests=true"
+          }
         }
       }
     }
     stage('Archive App') {
       steps {
-        sh "${mvnCmd} deploy -DskipTests=true"
+        container("maven"){
+          sh "${mvnCmd} deploy -DskipTests=true"
+        }
       }
     }
     stage('Build Image') {
