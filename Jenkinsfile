@@ -51,7 +51,7 @@ spec:
     stage('Test') {
       steps {
         container("maven"){
-          sh "${mvnCmd} test"
+          sh "${mvnCmd} verify"
         }
       }
       post{
