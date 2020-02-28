@@ -19,12 +19,6 @@ apply plugin: 'jacoco'
 apply plugin: 'org.sonarqube'
 apply plugin: 'maven-publish'
 
-ext {
-  bootstrapVersion = '3.3.6'
-  jqueryVersion = '2.2.4'
-  jqueryUiVersion = '1.11.4'
-}
-
 bootJar {
   archiveBaseName = 'spring-petclinic'
   archiveVersion =  version
@@ -36,6 +30,18 @@ targetCompatibility = 1.8
 
 repositories {
   mavenCentral()
+}
+
+sourceSets{
+  webTest{
+    compileClasspath += sourceSets.main.output
+    runtimeClasspath += sourceSets.main.output
+  }
+}
+
+configurations {
+  webTestImplementation.extendsFrom implementation
+  webTestRuntimeOnly.extendsFrom runtimeOnly
 }
 
 dependencies {
@@ -54,9 +60,9 @@ dependencies {
   
   implementation("org.webjars:webjars-locator-core")
 
-  implementation("org.webjars:jquery:${jqueryVersion}")
-  implementation("org.webjars:jquery-ui:${jqueryUiVersion}")
-  implementation("org.webjars:bootstrap:${bootstrapVersion}")
+  implementation("org.webjars:jquery:2.2.4")
+  implementation("org.webjars:jquery-ui:1.11.4")
+  implementation("org.webjars:bootstrap:3.3.6")
 
   runtimeOnly("org.hsqldb:hsqldb")
   runtimeOnly("mysql:mysql-connector-java")
@@ -69,6 +75,10 @@ dependencies {
   testImplementation("pl.pragmatists:JUnitParams:1.0.6")
   testImplementation("org.junit.jupiter:junit-jupiter-engine")
   testImplementation("org.mockito:mockito-junit-jupiter")
+
+  webTestImplementation('junit:junit:4.13')
+  webTestImplementation("org.seleniumhq.selenium:selenium-java:3.141.59")
+  webTestImplementation("org.seleniumhq.selenium:htmlunit-driver:2.36.0")
 }
 
 jacoco {
@@ -84,6 +94,14 @@ jacocoTestReport {
 
 test {
   useJUnitPlatform()
+}
+
+task webTest(type: Test) {
+  description = 'Runs selenium web tests.'
+  group = 'verification'
+
+  testClassesDirs = sourceSets.webTest.output.classesDirs
+  classpath = sourceSets.webTest.runtimeClasspath
 }
 
 publishing {
