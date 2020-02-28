@@ -149,11 +149,10 @@ public class CreateNewOwnerBulkIntegrationTestCase {
         driver.findElement(By.id("city")).sendKeys(owner.getCity());
         driver.findElement(By.id("telephone")).sendKeys(owner.getTelephone());
 
-        driver.findElement(By.id("addowner")).click();
+        driver.findElement(By.xpath(".//button[text()='Add Owner']")).click();
 
         (new WebDriverWait(driver, 5)).until(
-            d -> d.getCurrentUrl().startsWith(baseUrl + "/owners/")
-                && !d.getCurrentUrl().contains("/new"));
+            d -> d.findElement(By.linkText("Edit Owner")));
 
         assertTrue(driver.getPageSource().contains(owner.getFirstName()));
         assertTrue(driver.getPageSource().contains(owner.getLastName()));

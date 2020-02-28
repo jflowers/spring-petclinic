@@ -110,7 +110,7 @@ public class HomeComponentLocationIntegrationTestCase {
         logger.info("{} - waiting for linkText: Find owners", baseUrl);
         // wait for the application to get fully loaded
         (new WebDriverWait(driver, 25)).until(
-            d -> d.findElement(By.linkText("Find owners")));
+            d -> d.findElement(By.xpath(".//span[text()='Find owners']")));
 
         logger.info("looking for elements in root of DOM");
 
