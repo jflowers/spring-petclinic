@@ -1,4 +1,3 @@
-def mvnCmd = "mvn -s configuration/cicd-settings-nexus3.xml"
 def appVersion="2.2.0.${BUILD_NUMBER}"
 
 
@@ -18,7 +17,7 @@ spec:
   - name: jnlp
     image: registry.redhat.io/openshift4/ose-jenkins-agent-base:v4.2.15
     args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
-  - name: maven
+  - name: java
     image: registry.redhat.io/codeready-workspaces/stacks-java-rhel8:2.0
     command:
     - cat
@@ -34,46 +33,39 @@ spec:
   }
 
   stages {
-    stage('Set Version'){
-      steps{
-        container("maven"){
-          sh "${mvnCmd} versions:set -DnewVersion=${appVersion}"
-        }
-      }
-    }
     stage('Build App') {
       steps {
-        container("maven"){
-          sh "${mvnCmd} install -DskipTests=true"
+        container("java"){
+          sh "gradle bootJar -Pversion=${appVersion}"
         }
       }
     }
     stage('Test') {
       steps {
-        container("maven"){
-          sh "${mvnCmd} verify"
+        container("java"){
+          sh "gradle test jacocoTestReport"
         }
       }
       post{
         always{
-          junit '**/target/surefire-reports/TEST-*.xml'
-          jacoco execPattern: 'target/jacoco.exec'
+          junit 'build/test-results/test/TEST-*.xml'
+          jacoco execPattern: 'build/jacoco/test.exec'
         }
       }
     }
     stage('Code Analysis') {
       steps {
         script {
-          container("maven"){
-            sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -DskipTests=true"
+          container("java"){
+            sh "gradle sonar"
           }
         }
       }
     }
-    stage('Archive App') {
+    stage('Publish Jar') {
       steps {
-        container("maven"){
-          sh "${mvnCmd} deploy -DskipTests=true"
+        container("java"){
+          sh "gradle publish -Pversion=${appVersion}"
         }
       }
     }

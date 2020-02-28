@@ -8,6 +8,7 @@ buildscript {
   }
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8")
   }
 }
 
@@ -15,6 +16,8 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
+apply plugin: 'org.sonarqube'
+apply plugin: 'maven-publish'
 
 ext {
   bootstrapVersion = '3.3.6'
@@ -24,7 +27,7 @@ ext {
 
 bootJar {
   archiveBaseName = 'spring-petclinic'
-  archiveVersion =  '0.1.0'
+  archiveVersion =  version
   group = 'org.springframework.samples'
 }
 
@@ -69,9 +72,35 @@ dependencies {
 }
 
 jacoco {
-  toolVersion = "0.8.2"
+  toolVersion = "0.8.5"
+}
+
+jacocoTestReport {
+  reports {
+    xml.enabled true
+    csv.enabled true
+  }
 }
 
 test {
   useJUnitPlatform()
+}
+
+publishing {
+  publications {
+    mavenJava( MavenPublication ) {
+      artifact( tasks.bootJar.outputs.files.singleFile ) {
+        builtBy tasks.bootJar
+      }
+    }
+  }
+  repositories {
+    maven {
+      url 'http://nexus:8081/repository/maven-releases/'
+      credentials {
+        username nexusUser
+        password nexusPassword
+      }
+    }
+  }
 }
