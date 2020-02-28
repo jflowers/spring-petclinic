@@ -1,0 +1,77 @@
+buildscript {
+  ext {
+    springBootVersion = '2.2.0.RELEASE'
+  }
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
+
+ext {
+  bootstrapVersion = '3.3.6'
+  jqueryVersion = '2.2.4'
+  jqueryUiVersion = '1.11.4'
+}
+
+bootJar {
+  archiveBaseName = 'spring-petclinic'
+  archiveVersion =  '0.1.0'
+  group = 'org.springframework.samples'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation("org.springframework.boot:spring-boot-starter-actuator")
+  implementation("org.springframework.boot:spring-boot-starter-cache")
+  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+  implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+  
+  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+  implementation("org.springframework.boot:spring-boot-starter-data-rest")
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
+  implementation("javax.cache:cache-api")
+  implementation("org.ehcache:ehcache")
+  
+  implementation("org.webjars:webjars-locator-core")
+
+  implementation("org.webjars:jquery:${jqueryVersion}")
+  implementation("org.webjars:jquery-ui:${jqueryUiVersion}")
+  implementation("org.webjars:bootstrap:${bootstrapVersion}")
+
+  runtimeOnly("org.hsqldb:hsqldb")
+  runtimeOnly("mysql:mysql-connector-java")
+
+  compileOnly("org.springframework.boot:spring-boot-devtools")
+  
+  testImplementation("org.springframework.boot:spring-boot-starter-test"){
+    exclude group:"org.junit.vintage", module:"junit-vintage-engine"
+  }
+  testImplementation("pl.pragmatists:JUnitParams:1.0.6")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine")
+  testImplementation("org.mockito:mockito-junit-jupiter")
+}
+
+jacoco {
+  toolVersion = "0.8.2"
+}
+
+test {
+  useJUnitPlatform()
+}
