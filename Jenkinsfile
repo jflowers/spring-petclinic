@@ -85,8 +85,24 @@ spec:
         script {
           openshift.withCluster() {
             openshift.withProject(env.DEV_PROJECT) {
-              openshift.selector("dc", "petclinic").rollout().latest();
+              openshift.selector("dc", "petclinic").rollout().latest()
             }
+          }
+        }
+      }
+    }
+    stage(''){
+      steps{
+        script{
+          def petclinicService = ''
+          openshift.withCluster(){
+            openshift.withProject(env.DEV_PROJECT) {
+              petclinicService = openshift.selector("svc", "petclinic").object().get("spec").get("clusterIP")
+            }
+          }
+
+          container("java"){
+            sh "gradle webTest -Ptest.target.server.url=${petclinicService}"
           }
         }
       }
@@ -108,7 +124,7 @@ spec:
         script {
           openshift.withCluster() {
             openshift.withProject(env.STAGE_PROJECT) {
-              openshift.selector("dc", "petclinic").rollout().latest();
+              openshift.selector("dc", "petclinic").rollout().latest()
             }
           }
         }

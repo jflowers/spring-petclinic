@@ -102,6 +102,20 @@ task webTest(type: Test) {
 
   testClassesDirs = sourceSets.webTest.output.classesDirs
   classpath = sourceSets.webTest.runtimeClasspath
+
+  [
+    "test.target.server.url",
+    "test.selenium.hub.url",
+    "test.run.htmlunit",
+    "test.run.ie",
+    "test.run.firefox",
+    "test.run.chrome",
+    "test.run.opera"
+  ].each{ propertyName ->
+    if (project.hasProperty(propertyName)){
+      systemProperty(propertyName, project.getProperty(propertyName))
+    }
+  }
 }
 
 publishing {
