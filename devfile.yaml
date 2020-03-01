@@ -9,29 +9,46 @@ projects:
       type: git
       branch: master
 components:
-  - id: redhat/java8/latest
+  -
     type: chePlugin
-  - id: redhat/dependency-analytics/latest
-    type: chePlugin
-  - mountSources: true
-    endpoints:
-      - name: 8080/tcp
-        port: 8080
-    memoryLimit: 768Mi
+    id: redhat/java11/latest
+  -
     type: dockerimage
-    volumes:
-      - name: m2
-        containerPath: /home/jboss/.m2
-    alias: maven
-    image: 'registry.redhat.io/codeready-workspaces/stacks-java-rhel8:2.0'
+    alias: gradle
+    # image: quay.io/crw/plugin-java11-rhel8:latest
+    image: registry.redhat.io/codeready-workspaces/plugin-java11-rhel8:2.1
     env:
-      - value: >-
-          -XX:MaxRAMPercentage=50.0 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
-          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
-          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
-          -Xms20m -Djava.security.egd=file:/dev/./urandom
-          -Duser.home=/home/jboss
-        name: JAVA_OPTS
-      - value: $(JAVA_OPTS)
-        name: MAVEN_OPTS
-
+      - name: GRADLE_USER_HOME
+        value: /home/jboss/.gradle
+      - name: JAVA_OPTS
+        value: "-XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
+          -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom"
+      - name: JAVA_TOOL_OPTIONS
+        value: "-XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
+          -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom"
+      - name: HOME
+        value: /home/jboss
+    memoryLimit: 512Mi
+    volumes:
+      - name: gradle
+        containerPath: /home/jboss/.gradle
+    mountSources: true
+commands:
+  -
+    name: gradle build
+    actions:
+      -
+        type: exec
+        component: gradle
+        command: "gradle build"
+        workdir: ${CHE_PROJECTS_ROOT}/console-java-simple
+  -
+    name: gradle run
+    actions:
+      -
+        type: exec
+        component: gradle
+        command: "gradle run"
+        workdir: ${CHE_PROJECTS_ROOT}/console-java-simple

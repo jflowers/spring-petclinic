@@ -18,7 +18,7 @@ spec:
     image: registry.redhat.io/openshift4/ose-jenkins-agent-base:v4.2.15
     args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
   - name: java
-    image: registry.redhat.io/codeready-workspaces/stacks-java-rhel8:2.0
+    image: registry.redhat.io/codeready-workspaces/plugin-java11-rhel8:2.1
     command:
     - cat
     tty: true
@@ -27,7 +27,7 @@ spec:
 """
     }
   }
-  
+
   options {
     timeout(time: 20, unit: 'MINUTES')
   }
