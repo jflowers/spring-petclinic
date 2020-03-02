@@ -74,7 +74,7 @@ spec:
         script {
           openshift.withCluster() {
             openshift.withProject(env.DEV_PROJECT) {
-            openshift.selector("bc", "petclinic").startBuild("--from-file=target/spring-petclinic-${appVersion}.jar", "--wait=true")
+            openshift.selector("bc", "petclinic").startBuild("--from-file=build/libs/spring-petclinic-${appVersion}.jar", "--wait=true")
             }
           }
         }
