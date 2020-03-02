@@ -4,11 +4,11 @@
 <a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
 
 ## Running petclinic locally
-Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using Gradle. You can build a jar file and run it from the command line:
+Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using Gradle. 
 
+First start a [Create a CodeReady Worskpace](https://codeready-appdev-opentlc.apps.cluster-tysons-d7da.tysons-d7da.example.opentlc.com/f?url=http://gogs-appdev-opentlc.apps.cluster-tysons-d7da.tysons-d7da.example.opentlc.com/gogs/spring-petclinic/raw/master/devfile.yaml) then you can build a jar file and run it from the command line:
 
 ```
-git clone https://github.com/spring-projects/spring-petclinic.git
 cd spring-petclinic
 gradle bootJar
 java -jar target/*.jar
