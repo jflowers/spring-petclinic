@@ -55,10 +55,8 @@ spec:
     }
     stage('Code Analysis') {
       steps {
-        script {
-          container("java"){
-            sh "./gradlew sonar"
-          }
+        container("java"){
+          sh "./gradlew sonar"
         }
       }
     }
@@ -104,6 +102,11 @@ spec:
           container("java"){
             sh "./gradlew webTest -Ptest.target.server.url=${petclinicService}"
           }
+        }
+      }
+      post{
+        always{
+          junit 'build/test-results/webTest/TEST-*.xml'
         }
       }
     }
