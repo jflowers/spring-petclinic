@@ -65,7 +65,7 @@ spec:
     stage('Publish Jar') {
       steps {
         container("java"){
-          sh "./gradlew publish -Pversion=${appVersion}"
+          sh "./gradlew publish -Pversion=${appVersion} -Dorg.gradle.internal.publish.checksums.insecure=true"
         }
       }
     }
