@@ -36,14 +36,14 @@ spec:
     stage('Build App') {
       steps {
         container("java"){
-          sh "gradle bootJar -Pversion=${appVersion}"
+          sh "./gradlew bootJar -Pversion=${appVersion}"
         }
       }
     }
     stage('Test') {
       steps {
         container("java"){
-          sh "gradle test jacocoTestReport"
+          sh "./gradlew test jacocoTestReport"
         }
       }
       post{
@@ -57,7 +57,7 @@ spec:
       steps {
         script {
           container("java"){
-            sh "gradle sonar"
+            sh "./gradlew sonar"
           }
         }
       }
@@ -65,7 +65,7 @@ spec:
     stage('Publish Jar') {
       steps {
         container("java"){
-          sh "gradle publish -Pversion=${appVersion}"
+          sh "./gradlew publish -Pversion=${appVersion}"
         }
       }
     }
@@ -102,7 +102,7 @@ spec:
           }
 
           container("java"){
-            sh "gradle webTest -Ptest.target.server.url=${petclinicService}"
+            sh "./gradlew webTest -Ptest.target.server.url=${petclinicService}"
           }
         }
       }
