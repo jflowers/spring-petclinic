@@ -1,5 +1,5 @@
-def appVersion="2.2.0.${BUILD_NUMBER}"
-
+def appVersion = "2.2.0.${BUILD_NUMBER}"
+def gradleCmd = "./gradlew -ParchiveVersion=${appVersion}"
 
 pipeline {
   agent {
@@ -36,14 +36,14 @@ spec:
     stage('Build App') {
       steps {
         container("java"){
-          sh "./gradlew bootJar -ParchiveVersion=${appVersion}"
+          sh "${gradleCmd} bootJar"
         }
       }
     }
     stage('Test') {
       steps {
         container("java"){
-          sh "./gradlew test jacocoTestReport"
+          sh "${gradleCmd} test jacocoTestReport"
         }
       }
       post{
@@ -56,14 +56,14 @@ spec:
     stage('Code Analysis') {
       steps {
         container("java"){
-          sh "./gradlew sonar"
+          sh "${gradleCmd} sonar"
         }
       }
     }
     stage('Publish Jar') {
       steps {
         container("java"){
-          sh "./gradlew publish -ParchiveVersion=${appVersion} -Dorg.gradle.internal.publish.checksums.insecure=true"
+          sh "${gradleCmd} -Dorg.gradle.internal.publish.checksums.insecure=true"
         }
       }
     }
@@ -91,17 +91,8 @@ spec:
     }
     stage(''){
       steps{
-        script{
-          def petclinicService = ''
-          openshift.withCluster(){
-            openshift.withProject(env.DEV_PROJECT) {
-              petclinicService = openshift.selector("svc", "petclinic").object().get("spec").get("clusterIP")
-            }
-          }
-
-          container("java"){
-            sh "./gradlew webTest -Ptest.target.server.url=${petclinicService}"
-          }
+        container("java"){
+          sh "${gradleCmd} webTest"
         }
       }
       post{

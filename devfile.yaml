@@ -5,7 +5,7 @@ projects:
   - name: spring-petclinic
     source:
       location: >-
-        http://gogs-appdev-opentlc.apps.cluster-tysons-d7da.tysons-d7da.example.opentlc.com/gogs/spring-petclinic
+        http://gogs.appdev-opentlc.svc.cluster.local:3000/gogs/spring-petclinic
       type: git
       branch: master
 components:
