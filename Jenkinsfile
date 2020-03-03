@@ -36,7 +36,7 @@ spec:
     stage('Build App') {
       steps {
         container("java"){
-          sh "./gradlew bootJar -Pversion=${appVersion}"
+          sh "./gradlew bootJar -ParchiveVersion=${appVersion}"
         }
       }
     }
@@ -63,7 +63,7 @@ spec:
     stage('Publish Jar') {
       steps {
         container("java"){
-          sh "./gradlew publish -Pversion=${appVersion} -Dorg.gradle.internal.publish.checksums.insecure=true"
+          sh "./gradlew publish -ParchiveVersion=${appVersion} -Dorg.gradle.internal.publish.checksums.insecure=true"
         }
       }
     }

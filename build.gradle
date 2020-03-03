@@ -1,36 +1,32 @@
-buildscript {
-  ext {
-    springBootVersion = '2.2.0.RELEASE'
-  }
-  repositories {
-    jcenter()
-    mavenCentral()
-  }
-  dependencies {
-    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8")
-  }
+plugins {
+  id 'java'
+  id 'jacoco'
+  id 'org.sonarqube' version '2.8'
+  id 'maven-publish'
+  id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+  id 'org.springframework.boot' version '2.1.0.RELEASE'
 }
 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'jacoco'
-apply plugin: 'org.sonarqube'
-apply plugin: 'maven-publish'
+dependencyManagement {
+  imports {
+    mavenBom 'me.snowdrop:spring-boot-bom:2.1.12.Final'//-redhat-00001'
+  }
+}
 
 group = 'org.springframework.samples'
 
 bootJar {
   archiveBaseName = 'spring-petclinic'
-  archiveVersion =  version
+  archiveVersion =  project.archiveVersion
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-  mavenCentral()
+  maven {
+    url "${nexusRepoBaseUrl}/repository/maven-all-public/"
+  }
 }
 
 sourceSets{
@@ -129,7 +125,7 @@ publishing {
   }
   repositories {
     maven {
-      url 'http://nexus:8081/repository/maven-releases/'
+      url "${nexusRepoBaseUrl}/repository/maven-releases/"
       credentials {
         username nexusUser
         password nexusPassword

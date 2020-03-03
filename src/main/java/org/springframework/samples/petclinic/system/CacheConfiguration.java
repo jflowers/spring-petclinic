@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
  * creates the used cache for the application and enables statistics that become
  * accessible via JMX.
  */
-@Configuration(proxyBeanMethods = false)
+@Configuration()
 @EnableCaching
 class CacheConfiguration {
 
