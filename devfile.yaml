@@ -15,8 +15,11 @@ components:
     type: chePlugin
   - mountSources: true
     endpoints:
-      - name: 8080/tcp
+      - name: petclinic
         port: 8080
+        attributes:
+          discoverable: 'true'
+          public: 'true'
     memoryLimit: 2Gi
     type: dockerimage
     alias: gradle
@@ -35,15 +38,9 @@ components:
         value: $(JAVA_OPTS)
       - name: HOME
         value: /home/jboss
+      - name: WEB_APP_URL
+        value: http://petclinic.$(CHE_WORKSPACE_ID).svc.cluster.local:8080
 commands:
-  -
-    name: gradle build
-    actions:
-      -
-        type: exec
-        component: gradle
-        command: "./gradlew build"
-        workdir: ${CHE_PROJECTS_ROOT}/spring-petclinic
   -
     name: gradle run
     actions:
@@ -51,4 +48,20 @@ commands:
         type: exec
         component: gradle
         command: "./gradlew bootRun"
+        workdir: ${CHE_PROJECTS_ROOT}/spring-petclinic
+  -
+    name: gradle webTest
+    actions:
+      -
+        type: exec
+        component: gradle
+        command: "./gradlew webTest"
+        workdir: ${CHE_PROJECTS_ROOT}/spring-petclinic
+  -
+    name: gradle test
+    actions:
+      -
+        type: exec
+        component: gradle
+        command: "./gradlew test jacocoTestReport"
         workdir: ${CHE_PROJECTS_ROOT}/spring-petclinic

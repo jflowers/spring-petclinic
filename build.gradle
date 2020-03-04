@@ -15,6 +15,11 @@ dependencyManagement {
 
 group = 'org.springframework.samples'
 
+def crwWebAppUrl = System.getenv('WEB_APP_URL')
+if (crwWebAppUrl){
+  project.setProperty('test.target.server.url', crwWebAppUrl)
+}
+
 bootJar {
   archiveBaseName = 'spring-petclinic'
   archiveVersion =  project.archiveVersion
