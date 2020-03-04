@@ -9,7 +9,7 @@ plugins {
 
 dependencyManagement {
   imports {
-    mavenBom 'me.snowdrop:spring-boot-bom:2.1.12.Final'//-redhat-00001'
+    mavenBom 'me.snowdrop:spring-boot-bom:2.1.12.Final-redhat-00001'
   }
 }
 
