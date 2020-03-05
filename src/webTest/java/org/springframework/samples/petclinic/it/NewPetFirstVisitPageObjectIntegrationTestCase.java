@@ -9,6 +9,7 @@ import java.net.URL;
 
 import org.junit.Assume;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -30,7 +31,7 @@ public class NewPetFirstVisitPageObjectIntegrationTestCase
 
     private static final Logger logger = LoggerFactory.getLogger(NewPetFirstVisitPageObjectIntegrationTestCase.class);
 
-    @Test
+    @Test @Ignore
     public void testHtmlUnit() throws MalformedURLException, IOException {
 
         Assume.assumeTrue(RUN_HTMLUNIT);
@@ -49,7 +50,7 @@ public class NewPetFirstVisitPageObjectIntegrationTestCase
         }
     }
 
-    @Test
+    @Test @Ignore
     public void testIE() throws MalformedURLException, IOException {
 
         Assume.assumeTrue(RUN_IE);
@@ -68,7 +69,7 @@ public class NewPetFirstVisitPageObjectIntegrationTestCase
         }
     }
 
-    @Test
+    @Test @Ignore
     public void testFirefox() throws MalformedURLException, IOException {
 
         Assume.assumeTrue(RUN_FIREFOX);
@@ -87,7 +88,7 @@ public class NewPetFirstVisitPageObjectIntegrationTestCase
         }
     }
 
-    @Test
+    @Test @Ignore
     public void testChrome() throws MalformedURLException, IOException {
 
         Assume.assumeTrue(RUN_CHROME);
@@ -106,7 +107,7 @@ public class NewPetFirstVisitPageObjectIntegrationTestCase
         }
     }
 
-    @Test
+    @Test @Ignore
     public void testOpera() throws MalformedURLException, IOException {
 
         Assume.assumeTrue(RUN_OPERA);

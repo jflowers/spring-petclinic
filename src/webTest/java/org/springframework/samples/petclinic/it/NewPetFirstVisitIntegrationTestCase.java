@@ -10,6 +10,7 @@ import java.net.URL;
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -123,7 +124,7 @@ public class NewPetFirstVisitIntegrationTestCase {
         return retValue;
     }
 
-    @Test
+    @Test  @Ignore
     public void testHtmlUnit()
         throws MalformedURLException, IOException {
 
@@ -143,7 +144,7 @@ public class NewPetFirstVisitIntegrationTestCase {
         }
     }
 
-    @Test
+    @Test  @Ignore
     public void testIE()
         throws MalformedURLException, IOException {
 
@@ -163,7 +164,7 @@ public class NewPetFirstVisitIntegrationTestCase {
         }
     }
 
-    @Test
+    @Test  @Ignore
     public void testFirefox()
         throws MalformedURLException, IOException {
 
@@ -183,7 +184,7 @@ public class NewPetFirstVisitIntegrationTestCase {
         }
     }
 
-    @Test
+    @Test  @Ignore
     public void testChrome()
         throws MalformedURLException, IOException {
 
@@ -203,7 +204,7 @@ public class NewPetFirstVisitIntegrationTestCase {
         }
     }
 
-    @Test
+    @Test  @Ignore
     public void testOpera()
         throws MalformedURLException, IOException {
 
