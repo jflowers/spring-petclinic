@@ -89,7 +89,7 @@ spec:
         }
       }
     }
-    stage(''){
+    stage('Web Testing'){
       steps{
         container("java"){
           sh "${gradleCmd} webTest"
