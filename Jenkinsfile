@@ -70,7 +70,9 @@ spec:
     stage('Build App') {
       steps {
         container("java"){
-          sh "${gradleCmd} bootJar"
+          ansiColor('xterm') {
+            sh "${gradleCmd} bootJar"
+          }
         }
       }
     }
@@ -78,7 +80,9 @@ spec:
       steps {
         script{LAST_STAGE = env.STAGE_NAME}
         container("java"){
-          sh "${gradleCmd} test jacocoTestReport"
+          ansiColor('xterm') {
+            sh "${gradleCmd} test jacocoTestReport"
+          }
         }
       }
       post{
@@ -92,7 +96,9 @@ spec:
       steps {
         script{LAST_STAGE = env.STAGE_NAME}
         container("java"){
-          sh "${gradleCmd} sonar"
+          ansiColor('xterm') {
+            sh "${gradleCmd} sonar"
+          }
         }
       }
     }
@@ -100,7 +106,9 @@ spec:
       steps {
         script{LAST_STAGE = env.STAGE_NAME}
         container("java"){
-          sh "${gradleCmd} -Dorg.gradle.internal.publish.checksums.insecure=true"
+          ansiColor('xterm') {
+            sh "${gradleCmd} -Dorg.gradle.internal.publish.checksums.insecure=true"
+          }
         }
       }
     }
@@ -132,7 +140,9 @@ spec:
       steps{
         script{LAST_STAGE = env.STAGE_NAME}
         container("java"){
-          sh "${gradleCmd} webTest"
+          ansiColor('xterm') {
+            sh "${gradleCmd} webTest"
+          }
         }
       }
       post{
