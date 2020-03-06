@@ -65,7 +65,6 @@ spec:
         script{LAST_STAGE = env.STAGE_NAME}
         
         script{version.changeDisplayNameToBuildVersion()}
-        sh 'false'
       }
     }
     stage('Build App') {
