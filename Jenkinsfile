@@ -59,6 +59,10 @@ spec:
     timeout(time: 20, unit: 'MINUTES')
   }
 
+  environment{
+    TERM = 'xterm-256color'
+  }
+
   stages {
     stage('Version'){
       steps{
