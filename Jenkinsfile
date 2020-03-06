@@ -1,7 +1,7 @@
 import groovy.transform.Field
 
 jsl = library(
-  identifier: "jsl-peanut-butter@1.0.4",
+  identifier: "jsl-peanut-butter@1.0.5",
   retriever: modernSCM(
     [
       $class: 'GitSCMSource',
@@ -26,6 +26,7 @@ def getGradleCmd(){
 def nodeLabel = 'spring-petclinic-pipeline-agent'
 
 version = jsl.com.peanutbutter.jenkins.Version.new(this, versionPrefix)
+errorSummary = jsl.com.peanutbutter.jenkins.ErrorSummary.new(this)
 
 pipeline {
   agent {
