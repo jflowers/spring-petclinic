@@ -120,6 +120,7 @@ task webTest(type: Test) {
   }
 }
 
+version = archiveVersion // MavenPublication is still using version
 publishing {
   publications {
     mavenJava( MavenPublication ) {
