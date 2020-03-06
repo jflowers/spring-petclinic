@@ -5,8 +5,7 @@ jsl = library(
   retriever: modernSCM(
     [
       $class: 'GitSCMSource',
-      remote: 'https://github.com/jflowers/jsl-peanut-butter.git',
-      credentialsId: 'github'
+      remote: 'https://github.com/jflowers/jsl-peanut-butter.git'
     ]
   )
 )
@@ -17,7 +16,7 @@ def appName = 'pipeline'
 @Field
 def versionPrefix = '2.2.0'
 
-def getgradleCmd(){
+def getGradleCmd(){
   return "./gradlew -ParchiveVersion=${version.buildVersion}"
 }
 
