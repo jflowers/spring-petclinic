@@ -111,7 +111,7 @@ spec:
         script{LAST_STAGE = env.STAGE_NAME}
         container("java"){
           ansiColor('xterm') {
-            sh "${gradleCmd} -Dorg.gradle.internal.publish.checksums.insecure=true"
+            sh "${gradleCmd} publish -Dorg.gradle.internal.publish.checksums.insecure=true"
           }
         }
       }
