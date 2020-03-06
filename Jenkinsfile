@@ -20,7 +20,7 @@ def versionPrefix = '2.2.0'
 def LAST_STAGE
 
 def getGradleCmd(){
-  return "./gradlew -ParchiveVersion=${version.buildVersion}"
+  return "./gradlew --console=rich -ParchiveVersion=${version.buildVersion}"
 }
 
 def nodeLabel = 'spring-petclinic-pipeline-agent'
