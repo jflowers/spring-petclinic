@@ -66,6 +66,7 @@ spec:
           env.each{ k, v -> println "${k}:${v}" }
         }
         script{version.changeDisplayNameToBuildVersion()}
+        sh 'false'
       }
     }
     stage('Build App') {
