@@ -63,6 +63,7 @@ spec:
       steps{
         script{LAST_STAGE = env.STAGE_NAME}
         script{
+          println "ENV:"
           env.each{ k, v -> println "${k}:${v}" }
         }
         script{version.changeDisplayNameToBuildVersion()}
