@@ -1,7 +1,7 @@
 import groovy.transform.Field
 
 jsl = library(
-  identifier: "jsl-peanut-butter@1.0.3",
+  identifier: "jsl-peanut-butter@1.0.4",
   retriever: modernSCM(
     [
       $class: 'GitSCMSource',
@@ -62,7 +62,7 @@ spec:
     stage('Version'){
       steps{
         script{LAST_STAGE = env.STAGE_NAME}
-        sh 'printenv'
+        
         script{version.changeDisplayNameToBuildVersion()}
         sh 'false'
       }
