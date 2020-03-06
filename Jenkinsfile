@@ -16,6 +16,9 @@ def appName = 'pipeline'
 @Field
 def versionPrefix = '2.2.0'
 
+@Field
+def LAST_STAGE
+
 def getGradleCmd(){
   return "./gradlew -ParchiveVersion=${version.buildVersion}"
 }
@@ -56,6 +59,14 @@ spec:
   }
 
   stages {
+    stage('Checkout'){
+      steps{
+        script{LAST_STAGE = env.STAGE_NAME}
+        checkout scm
+
+        script{version.changeDisplayNameToBuildVersion()}
+      }
+    }
     stage('Build App') {
       steps {
         container("java"){
@@ -65,6 +76,7 @@ spec:
     }
     stage('Test') {
       steps {
+        script{LAST_STAGE = env.STAGE_NAME}
         container("java"){
           sh "${gradleCmd} test jacocoTestReport"
         }
@@ -78,6 +90,7 @@ spec:
     }
     stage('Code Analysis') {
       steps {
+        script{LAST_STAGE = env.STAGE_NAME}
         container("java"){
           sh "${gradleCmd} sonar"
         }
@@ -85,6 +98,7 @@ spec:
     }
     stage('Publish Jar') {
       steps {
+        script{LAST_STAGE = env.STAGE_NAME}
         container("java"){
           sh "${gradleCmd} -Dorg.gradle.internal.publish.checksums.insecure=true"
         }
@@ -92,6 +106,7 @@ spec:
     }
     stage('Build Image') {
       steps {
+        script{LAST_STAGE = env.STAGE_NAME}
         script {
           openshift.withCluster() {
             openshift.withProject(env.DEV_PROJECT) {
@@ -103,6 +118,7 @@ spec:
     }
     stage('Deploy DEV') {
       steps {
+        script{LAST_STAGE = env.STAGE_NAME}
         script {
           openshift.withCluster() {
             openshift.withProject(env.DEV_PROJECT) {
@@ -114,6 +130,7 @@ spec:
     }
     stage('Web Testing'){
       steps{
+        script{LAST_STAGE = env.STAGE_NAME}
         container("java"){
           sh "${gradleCmd} webTest"
         }
@@ -126,6 +143,7 @@ spec:
     }
     stage('Promote to STAGE?') {
       steps {
+        script{LAST_STAGE = env.STAGE_NAME}
         timeout(time:15, unit:'MINUTES') {
             input message: "Promote to STAGE?", ok: "Promote"
         }
@@ -138,6 +156,7 @@ spec:
     }
     stage('Deploy STAGE') {
       steps {
+        script{LAST_STAGE = env.STAGE_NAME}
         script {
           openshift.withCluster() {
             openshift.withProject(env.STAGE_PROJECT) {
@@ -160,6 +179,9 @@ spec:
         def summary = createSummary(icon: 'notepad.gif')
         summary.appendText("<h2><a href=\"https://${crwHost}/f?url=http://gogs.appdev-opentlc.svc.cluster.local:3000/gogs/spring-petclinic/raw/master/devfile.yaml\" target=\"_blank\" rel=\"noopener noreferrer\">Create a CodeReady Worskpace</a></h2>", false)
       }
+    }
+    failure {
+      script{errorSummary.generate(LAST_STAGE)}
     }
   }
 }
