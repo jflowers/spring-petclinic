@@ -59,11 +59,10 @@ spec:
   }
 
   stages {
-    stage('Checkout'){
+    stage('Version'){
       steps{
         script{LAST_STAGE = env.STAGE_NAME}
-        checkout scm
-
+        script{println env.inspect()}
         script{version.changeDisplayNameToBuildVersion()}
       }
     }
