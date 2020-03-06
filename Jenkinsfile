@@ -1,17 +1,41 @@
-def appVersion = "2.2.0.${BUILD_NUMBER}"
-def gradleCmd = "./gradlew -ParchiveVersion=${appVersion}"
+import groovy.transform.Field
+
+jsl = library(
+  identifier: "jsl-peanut-butter@1.0.3",
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/jflowers/jsl-peanut-butter.git',
+      credentialsId: 'github'
+    ]
+  )
+)
+
+@Field
+def appName = 'pipeline'
+
+@Field
+def versionPrefix = '2.2.0'
+
+def getgradleCmd(){
+  return "./gradlew -ParchiveVersion=${version.buildVersion}"
+}
+
+def nodeLabel = 'spring-petclinic-pipeline-agent'
+
+version = jsl.com.peanutbutter.jenkins.Version.new(this, versionPrefix)
 
 pipeline {
   agent {
     kubernetes {
       cloud 'openshift'
-      label 'spring-petclinic-pipeline-agent'
+      label nodeLabel
       yaml """
 apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    worker: spring-petclinic-pipeline-agent
+    worker: ${nodeLabel}
 spec:
   containers:
   - name: jnlp
@@ -72,7 +96,7 @@ spec:
         script {
           openshift.withCluster() {
             openshift.withProject(env.DEV_PROJECT) {
-            openshift.selector("bc", "petclinic").startBuild("--from-file=build/libs/spring-petclinic-${appVersion}.jar", "--wait=true")
+            openshift.selector("bc", "petclinic").startBuild("--from-file=build/libs/spring-petclinic-${version.buildVersion}.jar", "--wait=true")
             }
           }
         }
