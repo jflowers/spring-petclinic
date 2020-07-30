@@ -1,7 +1,7 @@
 import groovy.transform.Field
 
 jsl = library(
-  identifier: "jsl-peanut-butter@1.0.5",
+  identifier: "jsl-peanut-butter@1.0.6",
   retriever: modernSCM(
     [
       $class: 'GitSCMSource',
