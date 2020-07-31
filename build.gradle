@@ -30,7 +30,7 @@ targetCompatibility = 1.8
 
 repositories {
   maven {
-    url "${nexusRepoBaseUrl}/repository/maven-all-public/"
+    url "${nexusRepoBaseUrl}/repository/maven-public/"
   }
 }
 
