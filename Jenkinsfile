@@ -68,6 +68,8 @@ spec:
       steps{
         script{LAST_STAGE = env.STAGE_NAME}
         
+        sh 'printenv'
+        
         script{version.changeDisplayNameToBuildVersion()}
       }
     }
