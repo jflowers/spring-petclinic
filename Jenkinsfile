@@ -184,17 +184,17 @@ spec:
   }
 
   post{
-    always{
-      script{
-        def crwHost = ''
-        openshift.withCluster() {
-          crwHost = openshift.selector("route", "codeready").object().get("spec").get("host")
-        }
+    // always{
+    //   script{
+    //     def crwHost = ''
+    //     openshift.withCluster() {
+    //       crwHost = openshift.selector("route", "codeready").object().get("spec").get("host")
+    //     }
 
-        def summary = createSummary(icon: 'notepad.gif')
-        summary.appendText("<h2><a href=\"https://${crwHost}/f?url=http://gogs.appdev-opentlc.svc.cluster.local:3000/gogs/spring-petclinic/raw/master/devfile.yaml\" target=\"_blank\" rel=\"noopener noreferrer\">Create a CodeReady Worskpace</a></h2>", false)
-      }
-    }
+    //     def summary = createSummary(icon: 'notepad.gif')
+    //     summary.appendText("<h2><a href=\"https://${crwHost}/f?url=http://gogs.appdev-opentlc.svc.cluster.local:3000/gogs/spring-petclinic/raw/master/devfile.yaml\" target=\"_blank\" rel=\"noopener noreferrer\">Create a CodeReady Worskpace</a></h2>", false)
+    //   }
+    // }
     failure {
       script{errorSummary.generate(LAST_STAGE)}
     }
